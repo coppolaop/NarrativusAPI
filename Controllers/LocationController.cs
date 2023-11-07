@@ -49,12 +49,10 @@ namespace NarrativusAPI.Controllers
                 return BadRequest();
             }
 
-            Location locatedIn = null;
-            if (location.LocatedIn != null)
+            if (location.Id.Equals(location.LocatedInId))
             {
-                locatedIn = context.Locations.FirstOrDefault(l => l.Id == location.LocatedIn.Id);
+                return BadRequest("Location could not be located inside itself");
             }
-            location.LocatedIn = locatedIn;
 
             try
             {
@@ -77,6 +75,11 @@ namespace NarrativusAPI.Controllers
                 return BadRequest();
             }
 
+            if (location.Id.Equals(location.LocatedInId))
+            {
+                return BadRequest("Location could not be located inside itself");
+            }
+
             var dbLocation = await context
                 .Locations
                 .FirstOrDefaultAsync(x => x.Id == location.Id);
@@ -90,13 +93,7 @@ namespace NarrativusAPI.Controllers
             dbLocation.Type = location.Type;
             dbLocation.Description = location.Description;
             dbLocation.FoundationDate = location.FoundationDate;
-
-            Location locatedIn = null;
-            if (location.LocatedIn != null)
-            {
-                locatedIn = context.Locations.FirstOrDefault(l => l.Id == location.LocatedIn.Id);
-            }
-            location.LocatedIn = locatedIn;
+            dbLocation.LocatedInId = location.LocatedInId;
 
             try
             {
