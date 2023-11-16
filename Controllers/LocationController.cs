@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Transactions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NarrativusAPI.Data;
 using NarrativusAPI.Models;
@@ -59,7 +53,8 @@ namespace NarrativusAPI.Controllers
                 await context.Locations.AddAsync(location);
                 await context.SaveChangesAsync();
                 return Created("v1/locations/{location.Id}", location);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex);
             }
