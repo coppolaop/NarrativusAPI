@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NarrativusAPI.Data;
+using NarrativusAPI.DTOs;
 using NarrativusAPI.Models;
 
 namespace NarrativusAPI.Controllers
@@ -28,7 +29,9 @@ namespace NarrativusAPI.Controllers
             var relationship = await context
                 .Relationships
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .Include(r => r.Owner)
+                .Include(r => r.RelatedTo)
+                .FirstOrDefaultAsync(r => r.Id == id);
 
             return Ok(relationship);
         }
@@ -36,7 +39,7 @@ namespace NarrativusAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(
             [FromServices] AppDbContext context,
-            [FromBody] Relationship relationship)
+            [FromBody] RelationshipDTO relationshipDto)
         {
             if (!ModelState.IsValid)
             {
@@ -45,6 +48,18 @@ namespace NarrativusAPI.Controllers
 
             try
             {
+                var owner = await context.Characters.FirstOrDefaultAsync(c => c.Id == relationshipDto.OwnerId);
+                var relatedTo = await context.Characters.FirstOrDefaultAsync(c => c.Id == relationshipDto.RelatedToId);
+
+                Relationship relationship = new Relationship
+                {
+                    OwnerId = relationshipDto.OwnerId,
+                    Owner = owner,
+                    RelatedToId = relationshipDto.RelatedToId,
+                    RelatedTo = relatedTo,
+                    Type = relationshipDto.Relation
+
+                };
                 await context.Relationships.AddAsync(relationship);
                 await context.SaveChangesAsync();
                 return Created("v1/relationships/{relationship.Id}", relationship);
@@ -58,7 +73,7 @@ namespace NarrativusAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> PutAsync(
             [FromServices] AppDbContext context,
-            [FromBody] Relationship relationship)
+            [FromBody] RelationshipDTO relationshipDto)
         {
             if (!ModelState.IsValid)
             {
@@ -67,19 +82,25 @@ namespace NarrativusAPI.Controllers
 
             var dbRelationship = await context
                 .Relationships
-                .FirstOrDefaultAsync(x => x.Id == relationship.Id);
+                .FirstOrDefaultAsync(x => x.Id == relationshipDto.Id);
 
             if (dbRelationship == null)
             {
                 return NotFound();
             }
 
-            dbRelationship.Type = relationship.Type;
-            dbRelationship.RelatedToId = relationship.RelatedToId;
-            dbRelationship.RelatedTo = relationship.RelatedTo;
+            dbRelationship.Type = relationshipDto.Relation;
+            dbRelationship.RelatedToId = relationshipDto.RelatedToId;
+            dbRelationship.OwnerId = relationshipDto.OwnerId;
 
             try
             {
+                var owner = await context.Characters.FirstOrDefaultAsync(c => c.Id == relationshipDto.OwnerId);
+                var relatedTo = await context.Characters.FirstOrDefaultAsync(c => c.Id == relationshipDto.RelatedToId);
+
+                dbRelationship.Owner = owner;
+                dbRelationship.RelatedTo = relatedTo;
+
                 context.Relationships.Update(dbRelationship);
                 await context.SaveChangesAsync();
 

@@ -12,5 +12,19 @@ namespace NarrativusAPI.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlite("DataSource=app.db;Cache=Shared");
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Relationship>()
+                .HasOne(r => r.Owner)
+                .WithMany(c => c.Relationships)
+                .HasForeignKey(r => r.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Relationship>()
+                .HasOne(r => r.RelatedTo)
+                .WithMany()
+                .HasForeignKey(r => r.RelatedToId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
