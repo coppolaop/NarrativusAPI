@@ -89,6 +89,7 @@ namespace NarrativusAPI.Controllers
             dbLocation.Description = location.Description;
             dbLocation.FoundationDate = location.FoundationDate;
             dbLocation.LocatedInId = location.LocatedInId;
+            dbLocation.Appearances = location.Appearances;
 
             try
             {

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace NarrativusAPI.Models
+﻿namespace NarrativusAPI.Models
 {
     public class Character
     {
@@ -16,9 +14,9 @@ namespace NarrativusAPI.Models
         public String DateOfDeath { get; set; }
 
         public List<Relationship> Relationships { get; set; }
+        public List<Appearance> Appearances { get; set; }
 
         public int? BelongsToId { get; set; }
-        [JsonIgnore]
         public Location? BelongsTo { get; set; }
 
 

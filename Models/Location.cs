@@ -14,5 +14,7 @@ namespace NarrativusAPI.Models
 
         [JsonIgnore]
         public Location? LocatedIn { get; set; }
+
+        public List<Appearance> Appearances { get; set; }
     }
 }

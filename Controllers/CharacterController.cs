@@ -87,6 +87,7 @@ namespace NarrativusAPI.Controllers
             dbCharacter.Relationships = character.Relationships;
             dbCharacter.BelongsToId = character.BelongsToId;
             dbCharacter.BelongsTo = character.BelongsTo;
+            dbCharacter.Appearances = character.Appearances;
 
             try
             {
