@@ -8,6 +8,7 @@ namespace NarrativusAPI.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<Character> Characters { get; set; }
         public DbSet<Relationship> Relationships { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlite("DataSource=app.db;Cache=Shared");
