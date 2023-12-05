@@ -1,0 +1,27 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: https://{{dotnet-url}}/v1/locations
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "name": "Megga",
+    "type": "Planeta",
+    "description": "",
+    "foundationDate": "Surgimento",
+    "locatedInId": null,
+    "appearances": []
+  }
+}
+
+docs {
+  Updates a location on Database
+}

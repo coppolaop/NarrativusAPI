@@ -1,0 +1,15 @@
+meta {
+  name: FindAll
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://{{dotnet-url}}/v1/relationships
+  body: none
+  auth: none
+}
+
+docs {
+  Brings all relationships from the Database
+}

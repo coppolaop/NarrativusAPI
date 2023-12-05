@@ -1,0 +1,24 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: https://{{dotnet-url}}/v1/relationships
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "relation": "Vassalo e Amigo",
+    "ownerId": 1,
+    "relatedToId": 2
+  }
+}
+
+docs {
+  Updates a relationship beetween two characters on Database
+}
