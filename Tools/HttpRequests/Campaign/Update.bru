@@ -1,0 +1,25 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: https://{{dotnet-url}}/v1/campaigns
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 2,
+    "name": "Rise of the Storm",
+    "description": "Navegando pelos mares e enfrentando criaturas das profundezas.",
+    "sessions": [],
+    "stars": []
+  }
+}
+
+docs {
+  Updates a campaign on Database
+}

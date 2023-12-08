@@ -1,0 +1,15 @@
+meta {
+  name: FindById
+  type: http
+  seq: 2
+}
+
+get {
+  url: https://{{dotnet-url}}/v1/characters/1
+  body: none
+  auth: none
+}
+
+docs {
+  Brings a character from the Database according to the Id informed
+}

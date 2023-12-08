@@ -1,0 +1,33 @@
+meta {
+  name: Create
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://{{dotnet-url}}/v1/characters
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 0,
+    "name": "Bearly Bearson",
+    "ancestry": "Humano",
+    "family": "Bearson",
+    "sex": "Masculino",
+    "physicalCharacteristics": "Idoso, com barba e cabelos longos e grisalhos. Aparenta estar sempre alcoolizado.",
+    "background": "Um dos maiores capitães de navios do continente de Prime",
+    "roleplay": "Queixo para o alto, bochechas esticadas e a frase 'O velho urso dos mares'",
+    "dateOfBirth": "16 Bárbaro 252DE",
+    "dateOfDeath": "Desconhecida",
+    "relationships": [],
+    "belongsToId": 1,
+    "appearances": []
+  }
+}
+
+docs {
+  Creates a character on Database
+}

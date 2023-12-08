@@ -1,0 +1,28 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: https://{{dotnet-url}}/v1/sessions
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "number": 1,
+    "season": 1,
+    "description": "The Thunder",
+    "date": "2025-03-07T00:00:00.000Z",
+    "campaignId": 1,
+    "campaign": null,
+    "appearances": []
+  }
+}
+
+docs {
+  Creates a campaign on Database
+}

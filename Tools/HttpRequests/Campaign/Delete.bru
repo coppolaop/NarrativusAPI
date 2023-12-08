@@ -1,0 +1,15 @@
+meta {
+  name: Delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: https://{{dotnet-url}}/v1/campaigns/1
+  body: none
+  auth: none
+}
+
+docs {
+  Remove a campaign from the Database according to the Id informed
+}
