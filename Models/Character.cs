@@ -18,7 +18,5 @@
 
         public int? BelongsToId { get; set; }
         public Location? BelongsTo { get; set; }
-
-
     }
 }

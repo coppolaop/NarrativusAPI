@@ -6,39 +6,38 @@ using NarrativusAPI.Models;
 namespace NarrativusAPI.Controllers
 {
     [ApiController]
-    [Route("v1/characters")]
-    public class CharacterController : ControllerBase
+    [Route("v1/sessions")]
+    public class SessionController : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromServices] AppDbContext context)
         {
-            var characters = await context
-                .Characters
+            var session = await context
+                .Sessions
                 .AsNoTracking()
                 .ToListAsync();
 
-            return Ok(characters);
+            return Ok(session);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> GetByIdAsync(
+        public async Task<ActionResult<Session>> GetByIdAsync(
             [FromServices] AppDbContext context,
             [FromRoute] int id)
         {
-            var character = await context
-                .Characters
+            var session = await context
+                .Sessions
                 .AsNoTracking()
-                .Include(c => c.Relationships)
-                .Include(c => c.BelongsTo)
+                .Include(s => s.Campaign)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            return Ok(character);
+            return Ok(session);
         }
 
         [HttpPost]
         public async Task<IActionResult> PostAsync(
             [FromServices] AppDbContext context,
-            [FromBody] Character character)
+            [FromBody] Session session)
         {
             if (!ModelState.IsValid)
             {
@@ -47,9 +46,9 @@ namespace NarrativusAPI.Controllers
 
             try
             {
-                await context.Characters.AddAsync(character);
+                await context.Sessions.AddAsync(session);
                 await context.SaveChangesAsync();
-                return Created("v1/characters/{location.Id}", character);
+                return Created("v1/sessions/{session.Id}", session);
             }
             catch (Exception ex)
             {
@@ -60,42 +59,36 @@ namespace NarrativusAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> PutAsync(
             [FromServices] AppDbContext context,
-            [FromBody] Character character)
+            [FromBody] Session session)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var dbCharacter = await context
-                .Characters
-                .FirstOrDefaultAsync(x => x.Id == character.Id);
+            var dbSession = await context
+                .Sessions
+                .FirstOrDefaultAsync(x => x.Id == session.Id);
 
-            if (dbCharacter == null)
+            if (dbSession == null)
             {
                 return NotFound();
             }
 
-            dbCharacter.Name = character.Name;
-            dbCharacter.Ancestry = character.Ancestry;
-            dbCharacter.Family = character.Family;
-            dbCharacter.Sex = character.Sex;
-            dbCharacter.PhysicalCharacteristics = character.PhysicalCharacteristics;
-            dbCharacter.Background = character.Background;
-            dbCharacter.Roleplay = character.Roleplay;
-            dbCharacter.DateOfBirth = character.DateOfBirth;
-            dbCharacter.DateOfDeath = character.DateOfDeath;
-            dbCharacter.Relationships = character.Relationships;
-            dbCharacter.BelongsToId = character.BelongsToId;
-            dbCharacter.BelongsTo = character.BelongsTo;
-            dbCharacter.Appearances = character.Appearances;
+            dbSession.Number = session.Number;
+            dbSession.Season = session.Season;
+            dbSession.Description = session.Description;
+            dbSession.Date = session.Date;
+            dbSession.CampaignId = session.CampaignId;
+            dbSession.Campaign = session.Campaign;
+            dbSession.Appearances = session.Appearances;
 
             try
             {
-                context.Characters.Update(dbCharacter);
+                context.Sessions.Update(dbSession);
                 await context.SaveChangesAsync();
 
-                return Ok(dbCharacter);
+                return Ok(dbSession);
             }
             catch (Exception ex)
             {
@@ -108,13 +101,13 @@ namespace NarrativusAPI.Controllers
                 [FromServices] AppDbContext context,
                 [FromRoute] int id)
         {
-            var dbCharacter = await context
-                .Characters
+            var dbSession = await context
+                .Sessions
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             try
             {
-                context.Characters.Remove(dbCharacter);
+                context.Sessions.Remove(dbSession);
                 await context.SaveChangesAsync();
                 return NoContent();
             }

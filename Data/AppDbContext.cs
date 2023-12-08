@@ -9,6 +9,7 @@ namespace NarrativusAPI.Data
         public DbSet<Character> Characters { get; set; }
         public DbSet<Relationship> Relationships { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlite("DataSource=app.db;Cache=Shared");
@@ -26,6 +27,26 @@ namespace NarrativusAPI.Data
                 .WithMany()
                 .HasForeignKey(r => r.RelatedToId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Campaign>()
+                .HasMany(c => c.Sessions)
+                .WithOne(s => s.Campaign)
+                .HasForeignKey(s => s.CampaignId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Campaign>()
+            .HasMany(c => c.Stars)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "StarsCampaign",
+                j => j.HasOne<Character>().WithMany().HasForeignKey("StarId"),
+                j => j.HasOne<Campaign>().WithMany().HasForeignKey("CampaignId"),
+                j =>
+                {
+                    j.HasKey("StarId", "CampaignId");
+                    j.ToView("StarsCampaign");
+                }
+            );
         }
     }
 }
